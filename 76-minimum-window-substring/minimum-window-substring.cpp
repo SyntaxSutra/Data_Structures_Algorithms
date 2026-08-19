@@ -1,52 +1,56 @@
-#include <string>
-#include <unordered_map>
-#include <climits>
-#include <algorithm>
+#include <bits/stdc++.h>
+using namespace std;
 
 class Solution {
 public:
-    std::string minWindow(std::string s, std::string t) {
-        if (s.length() < t.length()) return "";
-
-        std::unordered_map<char, int> map;
-    
+    string minWindow(string s, string t) {
+        vector<int> need(128, 0);
+        vector<int> window(128, 0);
         for (char ch : t) {
-            map[ch]++;
+            need[ch]++;
         }
 
-        int start = -1;
-        int count = 0;
-        int needed = t.length();
-        int left = 0;
-        int minLen = INT_MAX;
-
-        for (int right = 0; right < s.length(); ++right) {
-            char ch = s[right];
-            
-            if (map.count(ch)) {
-                if (map[ch] > 0) {
-                    count++;
-                }
-                map[ch]--;
+        int required = 0;
+        for (int i = 0; i < 128; i++) {
+            if (need[i] > 0) {
+                required++;
             }
-            while (count == needed) {
-        
-                if (minLen > right - left + 1) {
-                    minLen = right - left + 1;
+        }
+
+        int formed = 0;
+        int left = 0;
+
+        int minLength = INT_MAX;
+        int start = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            char ch = s[right];
+
+            window[ch]++;
+            if (need[ch] > 0 && window[ch] == need[ch]) {
+                formed++;
+            }
+            while (formed == required) {
+                if (right - left + 1 < minLength) {
+                    minLength = right - left + 1;
                     start = left;
                 }
-                
+
                 char leftChar = s[left];
-                if (map.count(leftChar)) {
-                    map[leftChar]++;
-                    if (map[leftChar] > 0) {
-                        count--;
-                    }
+                window[leftChar]--;
+
+                if (need[leftChar] > 0 &&
+                    window[leftChar] < need[leftChar]) {
+                    formed--;
                 }
+
                 left++;
             }
         }
+        if (minLength == INT_MAX) {
+            return "";
+        }
 
-        return (minLen == INT_MAX) ? "" : s.substr(start, minLen);
+        return s.substr(start, minLength);
     }
 };

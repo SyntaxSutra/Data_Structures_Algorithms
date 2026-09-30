@@ -1,26 +1,38 @@
 class Solution {
 private:
-    int countFromCenter(const string& s , int left , int right)
+    bool isPalindrome(const string&s , int l , int r)
     {
-        int count = 0;
-        while(left>=0 && right<s.size() && s[left] == s[right] )
+        while(l<r)
         {
-            count++;
-            left--;
-            right++;
+            if(s[l] != s[r])
+            {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+
+
+public:
+    int countSubstrings(string s) {
+        int n = s.size();
+        int count = 0;
+        for(int i = 0 ;i<n;i++)
+        {
+            for(int j= i;j<n;j++)
+            {
+                if(isPalindrome(s,i,j))
+                {
+
+                    count++;
+                }
+
+            }
+           
         }
         return count;
-    }
-public:
-    int countSubstrings(string s) 
-    {
-        int total = 0;
-        for(int i = 0 ; i<s.size();i++)
-        {
-            total += countFromCenter(s,i,i);
-            total += countFromCenter(s,i,i+1);
-        }
-        return total;
         
     }
 };

@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int sumOfSquares(vector<int>& nums) {
+        int sum = 0 ; 
+        int n = nums.size();
+        for(int i=1;i<=n;i++)
+        {
+            if(n % i == 0)
+           {
+             int ans = nums[i-1];
+             sum += ans * ans;
+            }
+        
+        
+        }
+        return sum;
+        
+    }
+};

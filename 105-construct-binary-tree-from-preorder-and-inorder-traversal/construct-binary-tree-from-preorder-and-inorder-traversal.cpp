@@ -1,0 +1,49 @@
+
+class Solution {
+public:
+    TreeNode* solve(
+        vector<int>& preorder,
+        vector<int>& inorder,
+        int start,
+        int end,
+        int& idx
+    ) {
+        if (start > end) {
+            return nullptr;
+        }
+
+        int rootVal = preorder[idx];
+        int i = start;
+
+        // Find root in the current inorder range
+        for (; i <= end; i++) {
+            if (inorder[i] == rootVal) {
+                break;
+            }
+        }
+
+        idx++;
+
+        TreeNode* root = new TreeNode(rootVal);
+
+        root->left = solve(
+            preorder, inorder, start, i - 1, idx
+        );
+
+        root->right = solve(
+            preorder, inorder, i + 1, end, idx
+        );
+
+        return root;
+    }
+
+    TreeNode* buildTree(
+        vector<int>& preorder,
+        vector<int>& inorder
+    ) {
+        int idx = 0;
+        int n = preorder.size();
+
+        return solve(preorder, inorder, 0, n - 1, idx);
+    }
+};
